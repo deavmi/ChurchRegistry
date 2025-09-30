@@ -10,6 +10,7 @@ html
       p Priest management
       br
 
+      a(href="/priests?action=add",class="btn btn-primary") Add priest
 
       - void priestBlock(Priest p)
         div(class="card")
@@ -39,7 +40,7 @@ html
 
         - Priest p = db.getPriest(sf, targetID);
 
-        form(action="/doPriestEdit",method="post")
+        form(action="/doPriestEdit?id=#{targetID}",method="post")
           div(class="form-row")
             div(class="form-group col-md-6")
               label(for="cn") Name of priest
