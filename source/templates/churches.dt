@@ -10,9 +10,6 @@ html
       p Church management
       br 
 
-      a(href="/add_church",class="btn btn-primary") Add new church
-
-
       - void churchBlock(Church2 c)
         div(class="card")
           h5(class="card-header") #{c.name()}
@@ -30,9 +27,56 @@ html
             a(href="/churches?action=edit&id=#{c.getId()}",class="btn btn-edit") Edit
             a(href="/churches?action=remove&id=#{c.getId()}",class="btn btn-danger") Remove
 
-      - Church2[] cs = db.getChurches(sf);
+      - void renderList()
+        a(href="/add_church",class="btn btn-primary") Add new church
 
-      - foreach(Church2 c; cs)
-        - churchBlock(c);
-        
+        - Church2[] cs = db.getChurches(sf);
+        - foreach(Church2 c; cs)
+          - churchBlock(c);
 
+      - void renderAdd()
+        h3 Add a new church
+
+        form(action="/doChurchAdd",method="post")
+          div(class="form-row")
+            div(class="form-group col-md-6")
+              label(for="cn") Name of church
+              input(type="text", class="form-control", name="churchName", id="cn", placeholder="Place name here")
+            div(class="form-group col-md-6")
+              label(for="ca") Address
+              input(type="text", class="form-control", name="churchAddress", id="ca", placeholder="Place address here")
+            div(class="form-group col-md-6")
+              label(for="cp") Province
+              input(type="text", class="form-control", name="churchProvince", id="cp", placeholder="Place province here")
+
+          button(type="submit", class="btn btn-primary") Save church
+
+      - void renderEdit(size_t targetID)   
+        h3 Edit an existing church
+        - auto c = db.getChurch(sf, targetID);
+
+        form(action="/doChurchEdit?id=#{c.getId()}", method="post")
+          div(class="form-row")
+            div(class="form-group col-md-6")
+              label(for="cn") Name of church
+              input(type="text", class="form-control", name="churchName", id="cn", placeholder="#{c.name()}", value="#{c.name()}")
+            div(class="form-group col-md-6")
+              label(for="ca") Address
+              input(type="text", class="form-control", name="churchAddress", id="ca", placeholder="#{c.city()}", value="#{c.city()}")
+            div(class="form-group col-md-6")
+              label(for="cp") Province
+              input(type="text", class="form-control", name="churchProvince", id="cp", placeholder="#{c.province()}", value="#{c.province()}")
+
+          button(type="submit", class="btn btn-primary") Save church
+
+      - void renderDecide(string mode)
+        - DEBUG("Mode: ", mode == "list");
+        - if(mode == "list")
+          - renderList();
+        - else if(mode == "add")
+          - renderAdd();
+        - else if(mode == "edit")
+          - renderEdit(churchID);
+
+      <!-- Decide what to render -->
+      - renderDecide(mode);
