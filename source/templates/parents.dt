@@ -1,0 +1,35 @@
+doctype html
+html
+  include header
+
+  body
+    center
+      div
+      h1 Parents
+      p Parental management
+      br
+
+      a(href="/add_parental_figure",class="btn btn-primary") Add new parental figure
+
+      - foreach(ParentalFigure c; listParentalFigures(conn))
+        // churchBlock(c)
+        div(class="card")
+          h5(class="card-header") #{c.name()}
+          div(class="card-body")
+            h5(class="card-title") Fill in
+            p(class="card-text") Name: #{c.name()}
+            p(class="card-text") Database ID: #{c.id()}
+            p(class="card-text") Added: <i>#{c.dateAdded()}</i>
+            a(href="#",class="btn btn-primary") Edit
+            a(href="/parents?action=remove&id=#{c.id()}",class="btn btn-primary") Remove
+
+
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+      </nav>

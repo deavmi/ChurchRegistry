@@ -1,0 +1,38 @@
+doctype html
+html
+  include header
+
+
+  body
+    center
+      div
+      h1 Churches
+      p Church management
+      br 
+
+      a(href="/add_church",class="btn btn-primary") Add new church
+
+
+      - void churchBlock(Church2 c)
+        div(class="card")
+          h5(class="card-header") #{c.name()}
+          div(class="card-body")
+            <!-- h5(class="card-title") Fill in -->
+            p(class="card-text") Name: #{c.name()}
+            p(class="card-text") Province: #{c.province()}
+            p(class="card-text") City: #{c.city()}
+
+            p(class="card-text") Database ID: #{c.getId()}
+            p(class="card-text") Added: <i>#{c.dateAdded()}</i>
+            p(class="card-text") Last updated: <i>#{c.dateUpdated()}</i>
+
+
+            a(href="/churches?action=edit&id=#{c.getId()}",class="btn btn-edit") Edit
+            a(href="/churches?action=remove&id=#{c.getId()}",class="btn btn-danger") Remove
+
+      - Church2[] cs = db.getChurches(sf);
+
+      - foreach(Church2 c; cs)
+        - churchBlock(c);
+        
+

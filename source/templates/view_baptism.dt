@@ -1,0 +1,19 @@
+doctype html
+html
+  include header
+
+
+  body
+    center
+      div
+      h1 Baptisms
+      p Baptismal registry
+      br 
+
+      a(href="/baptisms?action=remove&id=#{entry.id()}",class="btn btn-primary") Remove
+      a(href="/baptisms?action=remove&id=#{entry.id()}",class="btn btn-primary") Print
+
+
+      p() #{entry}
+            
+

@@ -1,0 +1,36 @@
+doctype html
+html
+  include header
+
+
+  body
+    center
+      div
+      h1 Baptisms
+      p Baptismal registry
+      br 
+
+      a(href="/add_baptisms",class="btn btn-primary") Add baptismal entry
+
+      br
+      br
+
+      - foreach(BaptismalEntry c; listBaptisms(conn))
+        div(class="card")
+          h5(class="card-header") #{c.title()}
+          div(class="card-body")
+            p(class="card-text") Date of baptsim: #{c.getBaptismalDate()}
+            p(class="card-text") Database ID: #{c.id()}
+            p(class="card-text") Entry added: <i>#{c.dateAdded()}</i>
+
+
+            h5(class="card-title") Sponsors
+            - ParentalFigure[] baptismalFigures = getBaptismalFigures(conn, c.id());
+            // p(class="card-text") #{baptismalFigures}
+            - if(baptismalFigures.length)
+              - foreach(ParentalFigure pf; baptismalFigures)
+                p(class="card-text") #{pf.name()}
+                
+            a(href="#",class="btn btn-primary") Edit
+            a(href="/baptisms?action=remove&id=#{c.id()}",class="btn btn-primary") Remove
+
