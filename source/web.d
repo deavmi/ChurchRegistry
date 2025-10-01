@@ -109,7 +109,16 @@ public final class WebServer
         pgInfo.isPriests = true;
 
         auto q = req.query;
-        string action = *("action" in q);
+        string* action_ptr = "action" in q;
+        string action = "list";
+        
+        // if not specified then assume listing
+        // otheriwse dtermine it here
+        if(action_ptr !is null)
+        {
+            action = *action_ptr;
+        }
+
         DEBUG("Action: ", action);
 
         // Set only when in editing mode
@@ -125,7 +134,7 @@ public final class WebServer
             auto p = new Priest();
             p.id = priestID;
             db.removePriest(this.sf, p);
-            resp.redirect("/priests?action=list");
+            resp.redirect("/priests");
         }
         // in editing mode, grab id
         else if(action == "edit")
