@@ -445,6 +445,19 @@ public void removeChurch(SessionFactory sf, size_t id)
     removeChurch(sf, c);
 }
 
+public Baptism getBaptism(SessionFactory sf, size_t id)
+{
+    auto s = sf.openSession();
+    scope(exit)
+    {
+        s.close();
+    }
+
+    auto q = s.createQuery("FROM baptisms WHERE id = :ID").setParameter("ID", id);
+    Baptism[] bs = q.list!(Baptism)();
+    return bs[0];
+}
+
 public void removeBaptism(SessionFactory sf, Baptism b)
 {
     auto s = sf.openSession();
@@ -464,6 +477,19 @@ public void removeBaptism(SessionFactory sf, size_t id)
     removeBaptism(sf, b);
 }
 
+public Baptism[] getBaptisms(SessionFactory sf)
+{
+    auto s = sf.openSession();
+    scope(exit)
+    {
+        s.close();
+    }
+
+    auto q = s.createQuery("FROM baptisms");
+    auto bs = q.list!(Baptism)();
+    return bs;
+}
+
 import types;
 
 public ParentalFigure2[] listParentalFigures(SessionFactory sf)
@@ -478,6 +504,8 @@ public ParentalFigure2[] listParentalFigures(SessionFactory sf)
     auto pfs = q.list!(ParentalFigure2)();
     return pfs;
 }
+
+
 
 private string SQL_BAPTISM_LIST =
 `
