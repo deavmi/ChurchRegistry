@@ -15,22 +15,111 @@ html
       br
       br
 
-      - foreach(BaptismalEntry c; listBaptisms(conn))
+      - foreach(c; listBaptisms(sf))
         div(class="card")
           h5(class="card-header") #{c.title()}
           div(class="card-body")
             p(class="card-text") Date of baptsim: #{c.getBaptismalDate()}
-            p(class="card-text") Database ID: #{c.id()}
+            p(class="card-text") Database ID: #{c.getId()}
             p(class="card-text") Entry added: <i>#{c.dateAdded()}</i>
 
 
-            h5(class="card-title") Sponsors
-            - ParentalFigure[] baptismalFigures = getBaptismalFigures(conn, c.id());
-            // p(class="card-text") #{baptismalFigures}
-            - if(baptismalFigures.length)
-              - foreach(ParentalFigure pf; baptismalFigures)
-                p(class="card-text") #{pf.name()}
+            // h5(class="card-title") Sponsors
+            // - ParentalFigure[] baptismalFigures = getBaptismalFigures(sf, c.id());
+            // // p(class="card-text") #{baptismalFigures}
+            // - if(baptismalFigures.length)
+            //   - foreach(ParentalFigure pf; baptismalFigures)
+            //     p(class="card-text") #{pf.name()}
                 
             a(href="#",class="btn btn-primary") Edit
-            a(href="/baptisms?action=remove&id=#{c.id()}",class="btn btn-primary") Remove
+            a(href="/baptisms?action=remove&id=#{c.getId()}",class="btn btn-primary") Remove
+      
+      - void baptismBlock(Baptism b)
+        div(class="card")
+          h5(class="card-header") #{p.name()}
+          div(class="card-body")
+            <!-- h5(class="card-title") Fill in -->
+            p(class="card-text") Name: #{b.name()}
+            p(class="card-text") Address: #{b.address()}
+
+            p(class="card-text") Database ID: #{b.getId()}
+            p(class="card-text") Added: <i>#{b.dateAdded()}</i>
+            p(class="card-text") Last updated: <i>#{b.dateUpdated()}</i>
+
+
+            a(href="/priests?action=edit&id=#{b.getId()}",class="btn btn-edit") Edit
+            a(href="/priests?action=remove&id=#{b.getId()}",class="btn btn-danger") Remove
+
+
+      - void renderList()
+        a(href="/priests?action=add",class="btn btn-primary") Add priest
+        h3 Entries
+
+        - foreach(Baptism b; db.getBaptisms(sf))
+          - baptismBlock(b);
+      
+      - void renderEdit(size_t targetID)   
+        h3 Edit existing baptismal entry
+
+        - Baptism b = db.getBaptism(sf, targetID);
+
+        form(action="/doPriestEdit?id=#{targetID}",method="post")
+          div(class="form-row")
+            div(class="form-group col-md-6")
+              label(for="cn") Name of priest
+              input(type="text", class="form-control", name="priestName", id="pn", placeholder="#{p.name()}", value="#{p.name()}")
+            div(class="form-group col-md-6")
+              label(for="ca") Address
+              input(type="text", class="form-control", name="priestAddress", id="pa", placeholder="#{p.address()}", value="#{p.address()}")
+
+            button(type="submit", class="btn btn-primary") Update priest
+      
+
+      - void renderAdd()
+        h3 Add a new baptismal entry
+
+        form(action="/doBaptismAdd",method="post")
+          <!-- Baptismal title -->
+          div(class="form-group col-md-6")
+            label(for="bt") Title
+            input(type="text", class="form-control", name="baptismalTitle", id="bt", placeholder="Enter name of individual being baptised")
+
+          <!-- Church where baptism is occuring -->
+          label(for="church") Church
+          select(class="form-select", name="churchId", id="church")
+            - foreach(c; getChurches(sf))
+              option(value="#{c.id()}") #{c.name()}
+
+          <!-- Parental figures -->
+          label(for="pff") Parental fatherly figure
+          select(class="form-select", name="parentalFigureFather", id="pff")
+            option(value="None") None
+            - foreach(pf; listParentalFigures(sf))
+              option(value="#{pf.id()}") #{pf.name()}
+          label(for="pfm") Parental motherly figure
+          select(class="form-select", name="parentalFigureMother", id="pmf")
+            option(value="None") None
+            - foreach(pf; listParentalFigures(sf))
+              option(value="#{pf.id()}") #{pf.name()}
+            
+
+          
+
+        button(type="submit", class="btn btn-primary") Save baptism
+
+
+      - void renderDecide(string mode)
+        - DEBUG("Mode: ", mode == "list");
+        - if(mode == "list")
+          - renderList();
+        - else if(mode == "add")
+          - renderAdd();
+        - else if(mode == "edit")
+          - renderEdit(baptismID);
+          
+
+      
+
+      <!-- Decide what to render -->
+      - renderDecide(mode);
 
