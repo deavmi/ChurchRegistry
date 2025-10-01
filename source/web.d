@@ -90,8 +90,8 @@ public final class WebServer
         
         // Routes for baptismal management
         r.get("/baptisms", &baptisms);
-        r.get("/add_baptisms", &add_baptismal);
         r.post("/doBaptismAdd", &doBaptismAdd);
+        // r.post("/doBaptismEdit", &doBaptismEdit);
 
         r.get("*", serveStaticFiles("./public/"));
 
@@ -217,7 +217,7 @@ public final class WebServer
             auto c = new Church2();
             c.id = churchID;
             db.removeChurch(this.sf, c);
-            resp.redirect("/churches?action=list");
+            resp.redirect("/churches");
         }
         // in editing mode, grab id
         else if(action == "edit")
@@ -307,16 +307,6 @@ public final class WebServer
         resp.render!("add_parental_figure.dt", pgInfo, conn);
     }
 
-
-    private void add_baptismal(HTTPServerRequest req, HTTPServerResponse resp)
-    {
-        Connection conn = null;
-        PageActivationInfo pgInfo = pgInfoFor("Baptisms");
-        pgInfo.isBaptism = true;
-
-        resp.render!("add_baptism.dt", pgInfo, conn);
-    }
-
     private void baptisms(HTTPServerRequest req, HTTPServerResponse resp)
     {
         Connection conn = null;
@@ -324,23 +314,42 @@ public final class WebServer
         pgInfo.isBaptism = true;
 
         auto q = req.query;
-        DEBUG("Query params: ", q);
-
-        auto pot_action = "action" in q;
-
-        if(pot_action)
+        string* action_ptr = "action" in q;
+        string action = "list";
+        
+        // if not specified then assume listing
+        // otheriwse dtermine it here
+        if(action_ptr !is null)
         {
-            if(*pot_action == "remove")
-            {
-                auto pot_id = "id" in q;
-                size_t entry_id = to!(size_t)(*pot_id);
-                WARN("Removing entry '", entry_id, "'");
-                removeBaptism(null, entry_id);
-                resp.redirect("/baptisms");
-            }
+            action = *action_ptr;
         }
 
-        resp.render!("baptisms.dt", pgInfo, conn);
+        DEBUG("Action: ", action);
+
+        // Set only when in editing mode
+        // or deleting mode
+        size_t baptismID;
+
+        // if mode is "remove" then,
+        // lookup entry, try delete it
+        // and return to listing
+        if(action == "remove")
+        {
+            baptismID = to!(size_t)(q["id"]);
+            auto b = new Baptism();
+            b.id = baptismID;
+            db.removeBaptism(this.sf, b);
+            resp.redirect("/baptisms");
+        }
+        // in editing mode, grab id
+        else if(action == "edit")
+        {
+            baptismID = to!(size_t)(q["id"]);
+        }
+
+        auto mode = action;
+        auto sf = this.sf;
+        resp.render!("baptisms.dt", pgInfo, action, baptismID, mode, sf);
     }
 
     private void doBaptismAdd(HTTPServerRequest req, HTTPServerResponse resp)
