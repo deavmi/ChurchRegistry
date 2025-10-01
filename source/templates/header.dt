@@ -33,7 +33,7 @@ include navbar_activator
           <a class="nav-link #{BAPTISM_ACTIVE}" aria-current="page" href="/baptisms">Baptisms</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link #{PRIESTS_ACTIVE}" aria-current="page" href="/priests?action=list">Priests</a>
+          <a class="nav-link #{PRIESTS_ACTIVE}" aria-current="page" href="/priests">Priests</a>
         </li>
 
         <li class="nav-item">

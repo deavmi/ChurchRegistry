@@ -28,7 +28,7 @@ html
             a(href="/churches?action=remove&id=#{c.getId()}",class="btn btn-danger") Remove
 
       - void renderList()
-        a(href="/add_church",class="btn btn-primary") Add new church
+        a(href="/churches?action=add",class="btn btn-primary") Add new church
 
         - Church2[] cs = db.getChurches(sf);
         - foreach(Church2 c; cs)
