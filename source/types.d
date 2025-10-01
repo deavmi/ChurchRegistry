@@ -199,6 +199,16 @@ public class ParentalFigure2
 {
     size_t id;
     string _name;
+
+    public auto name()
+    {
+        return this._name;
+    }
+
+    public auto getId()
+    {
+        return this.id;
+    }
 }
 
 @Table("priests")
