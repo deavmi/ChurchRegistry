@@ -273,8 +273,51 @@ public class Baptism
     // many baptisms can have many sponsors
     @ManyToMany
     ParentalFigure2[] _sponsors;
-    size_t _dateAdded, _dateUpdated;
+
+    size_t _dateAdded, _dateUpdated, _baptismalDate;
     Priest _priest;
+    string _name;
+
+    // TODO: Somehow this must be unique to the church (I guess)
+    size_t regNumber;
+
+    alias title = name;
+
+    public auto getId()
+    {
+        return this.id;
+    }
+
+    public auto church()
+    {
+        return this._church;
+    }
+
+    public auto name()
+    {
+        return this._name;
+    }
+
+    public string dateAdded()
+    {
+        import std.datetime.systime;
+        SysTime d = SysTime.fromUnixTime(this._dateAdded);
+        return d.toSimpleString();
+    }
+
+    public string dateUpdated()
+    {
+        import std.datetime.systime;
+        SysTime d = SysTime.fromUnixTime(this._dateUpdated);
+        return d.toSimpleString();
+    }
+
+    public string getBaptismalDate()
+    {
+        import std.datetime.systime;
+        SysTime d = SysTime.fromUnixTime(this._baptismalDate);
+        return d.toSimpleString();
+    }
 }
 
 public struct BaptismReg
