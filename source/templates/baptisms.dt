@@ -15,7 +15,7 @@ html
       br
       br
 
-      - foreach(c; listBaptisms(sf))
+      - foreach(c; getBaptisms(sf))
         div(class="card")
           h5(class="card-header") #{c.title()}
           div(class="card-body")
@@ -63,14 +63,11 @@ html
 
         - Baptism b = db.getBaptism(sf, targetID);
 
-        form(action="/doPriestEdit?id=#{targetID}",method="post")
+        form(action="/doBaptismEdit?id=#{targetID}",method="post")
           div(class="form-row")
             div(class="form-group col-md-6")
               label(for="cn") Name of priest
-              input(type="text", class="form-control", name="priestName", id="pn", placeholder="#{p.name()}", value="#{p.name()}")
-            div(class="form-group col-md-6")
-              label(for="ca") Address
-              input(type="text", class="form-control", name="priestAddress", id="pa", placeholder="#{p.address()}", value="#{p.address()}")
+              input(type="text", class="form-control", name="priestName", id="pn", placeholder="#{b.name()}", value="#{b.name()}")
 
             button(type="submit", class="btn btn-primary") Update priest
       
@@ -88,19 +85,19 @@ html
           label(for="church") Church
           select(class="form-select", name="churchId", id="church")
             - foreach(c; getChurches(sf))
-              option(value="#{c.id()}") #{c.name()}
+              option(value="#{c.getId()}") #{c.name()}
 
           <!-- Parental figures -->
           label(for="pff") Parental fatherly figure
           select(class="form-select", name="parentalFigureFather", id="pff")
             option(value="None") None
             - foreach(pf; listParentalFigures(sf))
-              option(value="#{pf.id()}") #{pf.name()}
+              option(value="#{pf.getId()}") #{pf.name()}
           label(for="pfm") Parental motherly figure
           select(class="form-select", name="parentalFigureMother", id="pmf")
             option(value="None") None
             - foreach(pf; listParentalFigures(sf))
-              option(value="#{pf.id()}") #{pf.name()}
+              option(value="#{pf.getId()}") #{pf.name()}
             
 
           
