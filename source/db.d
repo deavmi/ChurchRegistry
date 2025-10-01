@@ -380,10 +380,6 @@ public Church2[] getChurches(SessionFactory sf)
 
     auto q = s.createQuery("FROM Church2");
     Church2[] cs = q.list!(Church2)();
-    foreach(c; cs)
-    {
-        DEBUG("Church listing: ", c);
-    }
     return cs;
 }
 
