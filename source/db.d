@@ -445,72 +445,39 @@ public void removeChurch(SessionFactory sf, size_t id)
     removeChurch(sf, c);
 }
 
-import types;
-
-
-private string SQL_CHURCH_LIST =
-`
-SELECT * FROM church
-
-ORDER BY id ASC
-
--- Parameterize this
-%s
-`;
-
-public Church[] listChurches(Connection conn, ptrdiff_t limit = -1)
+public void removeBaptism(SessionFactory sf, Baptism b)
 {
-    auto s = conn.createStatement();
-    auto rs = s.executeQuery
-    (
-        format(SQL_CHURCH_LIST, limit > -1 ? format("LIMIT %d", limit) : "")
-    );
-
-
-    Church[] churches;
-    while(rs.next())
+    auto s = sf.openSession();
+    scope(exit)
     {
-        Church church = Church
-        (
-            rs.getInt("id"),
-            rs.getString("name"),
-            rs.getString("city"),
-            rs.getString("province"),
-            rs.getInt("dateAdded")
-        );
-        churches ~= church;
+        s.close();
     }
-	rs.close();
-	s.close();
-    
-    DEBUG("listing returned: ", churches);
-    return churches;
+
+    s.remove(b);
 }
 
-private string SQL_CHURCH_DEL =
-`
-    DELETE FROM church
-    WHERE id = %d
-`;
+public void removeBaptism(SessionFactory sf, size_t id)
+{
+    // construct a dummy just with `id` to match on
+    auto b = new Baptism();
+    b.id = id;
+    removeBaptism(sf, b);
+}
 
-// public void removeChurch(Connection conn, size_t churchId)
-// {
-//     auto s = conn.createStatement();
-//     auto i = s.executeUpdate
-//     (
-//         format(SQL_CHURCH_DEL, churchId)
-//     );
-//     s.close();
+import types;
 
-//     if(i)
-//     {
-//         DEBUG("Deleted church with id: ", churchId, i);
-//     }
-//     else
-//     {
-//         ERROR("Failure to delete church with id '", churchId, "'");
-//     }
-// }
+public ParentalFigure2[] listParentalFigures(SessionFactory sf)
+{
+    auto s = sf.openSession();
+    scope(exit)
+    {
+        s.close();
+    }
+
+    auto q = s.createQuery("FROM parental_figures");
+    auto pfs = q.list!(ParentalFigure2)();
+    return pfs;
+}
 
 private string SQL_BAPTISM_LIST =
 `
