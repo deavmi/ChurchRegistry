@@ -10,8 +10,6 @@ html
       p Priest management
       br
 
-      a(href="/priests?action=add",class="btn btn-primary") Add priest
-
       - void priestBlock(Priest p)
         div(class="card")
           h5(class="card-header") #{p.name()}
@@ -30,6 +28,7 @@ html
 
 
       - void renderList()
+        a(href="/priests?action=add",class="btn btn-primary") Add priest
         h3 Entries
 
         - foreach(Priest p; db.getPriests(sf))
