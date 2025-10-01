@@ -36,11 +36,11 @@ html
       
       - void baptismBlock(Baptism b)
         div(class="card")
-          h5(class="card-header") #{p.name()}
+          h5(class="card-header") #{b.name()}
           div(class="card-body")
             <!-- h5(class="card-title") Fill in -->
             p(class="card-text") Name: #{b.name()}
-            p(class="card-text") Address: #{b.address()}
+            // p(class="card-text") Address: #{b.address()}
 
             p(class="card-text") Database ID: #{b.getId()}
             p(class="card-text") Added: <i>#{b.dateAdded()}</i>
@@ -52,7 +52,7 @@ html
 
 
       - void renderList()
-        a(href="/priests?action=add",class="btn btn-primary") Add priest
+        a(href="/priests?action=add",class="btn btn-primary") Add new entry
         h3 Entries
 
         - foreach(Baptism b; db.getBaptisms(sf))
