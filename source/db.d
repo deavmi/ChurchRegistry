@@ -453,7 +453,7 @@ public Baptism getBaptism(SessionFactory sf, size_t id)
         s.close();
     }
 
-    auto q = s.createQuery("FROM baptisms WHERE id = :ID").setParameter("ID", id);
+    auto q = s.createQuery("FROM baptism WHERE id = :ID").setParameter("ID", id);
     Baptism[] bs = q.list!(Baptism)();
     return bs[0];
 }
@@ -485,8 +485,9 @@ public Baptism[] getBaptisms(SessionFactory sf)
         s.close();
     }
 
-    auto q = s.createQuery("FROM baptisms");
+    auto q = s.createQuery("FROM baptism");
     auto bs = q.list!(Baptism)();
+    foreach(b; bs) DEBUG(b);
     return bs;
 }
 
