@@ -15,3 +15,6 @@ registry-test-*
 *.obj
 *.lst
 dub.selections.json
+registry.sqbpro
+registry.sqlite
+haram.sqlite
