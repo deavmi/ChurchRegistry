@@ -453,7 +453,7 @@ public Baptism getBaptism(SessionFactory sf, size_t id)
         s.close();
     }
 
-    auto q = s.createQuery("FROM baptism WHERE id = :ID").setParameter("ID", id);
+    auto q = s.createQuery("FROM Baptism WHERE id = :ID").setParameter("ID", id);
     Baptism[] bs = q.list!(Baptism)();
     return bs[0];
 }
@@ -485,10 +485,19 @@ public Baptism[] getBaptisms(SessionFactory sf)
         s.close();
     }
 
-    auto q = s.createQuery("FROM baptism");
+    try
+    {
+        auto q = s.createQuery("FROM Baptism");
     auto bs = q.list!(Baptism)();
     foreach(b; bs) DEBUG(b);
     return bs;
+    }
+    catch(Exception e)
+    {
+        DEBUG(e);
+        return null;
+    }
+    
 }
 
 import types;
@@ -501,7 +510,7 @@ public ParentalFigure2[] listParentalFigures(SessionFactory sf)
         s.close();
     }
 
-    auto q = s.createQuery("FROM parental_figures");
+    auto q = s.createQuery("FROM Baptism");
     auto pfs = q.list!(ParentalFigure2)();
     return pfs;
 }
