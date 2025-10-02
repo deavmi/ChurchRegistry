@@ -349,6 +349,7 @@ public final class WebServer
 
         auto mode = action;
         auto sf = this.sf;
+        DEBUG("Hi");
         resp.render!("baptisms.dt", pgInfo, action, baptismID, mode, sf);
     }
 
