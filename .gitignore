@@ -18,3 +18,4 @@ dub.selections.json
 registry.sqbpro
 registry.sqlite
 haram.sqlite
+test.pdf
