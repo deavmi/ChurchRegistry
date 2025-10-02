@@ -199,6 +199,8 @@ public class ParentalFigure2
 {
     size_t id;
     string _name;
+    @ManyToMany
+    Baptism[] baptisms;
 
     public auto name()
     {
@@ -263,7 +265,7 @@ public class Priest
     }
 }
 
-import hibernated.core : ManyToMany, Id, Table;
+import hibernated.core : ManyToMany, Id, Table, OneToMany, Entity;
 
 @Table("baptisms")
 public class Baptism
