@@ -10,29 +10,10 @@ html
       p Baptismal registry
       br 
 
-      a(href="/add_baptisms",class="btn btn-primary") Add baptismal entry
+      
 
       br
       br
-
-      - foreach(c; getBaptisms(sf))
-        div(class="card")
-          h5(class="card-header") #{c.title()}
-          div(class="card-body")
-            p(class="card-text") Date of baptsim: #{c.getBaptismalDate()}
-            p(class="card-text") Database ID: #{c.getId()}
-            p(class="card-text") Entry added: <i>#{c.dateAdded()}</i>
-
-
-            // h5(class="card-title") Sponsors
-            // - ParentalFigure[] baptismalFigures = getBaptismalFigures(sf, c.id());
-            // // p(class="card-text") #{baptismalFigures}
-            // - if(baptismalFigures.length)
-            //   - foreach(ParentalFigure pf; baptismalFigures)
-            //     p(class="card-text") #{pf.name()}
-                
-            a(href="#",class="btn btn-primary") Edit
-            a(href="/baptisms?action=remove&id=#{c.getId()}",class="btn btn-primary") Remove
       
       - void baptismBlock(Baptism b)
         div(class="card")
@@ -47,15 +28,17 @@ html
             p(class="card-text") Last updated: <i>#{b.dateUpdated()}</i>
 
 
-            a(href="/priests?action=edit&id=#{b.getId()}",class="btn btn-edit") Edit
-            a(href="/priests?action=remove&id=#{b.getId()}",class="btn btn-danger") Remove
+            a(href="/baptisms?action=edit&id=#{b.getId()}",class="btn btn-edit") Edit
+            a(href="/baptisms?action=remove&id=#{b.getId()}",class="btn btn-danger") Remove
 
 
       - void renderList()
-        a(href="/priests?action=add",class="btn btn-primary") Add new entry
+        a(href="/baptisms?action=add",class="btn btn-primary") Add baptismal entry
         h3 Entries
 
+        - DEBUG("Here before listing...");
         - foreach(Baptism b; db.getBaptisms(sf))
+          - DEBUG("List: ", b);
           - baptismBlock(b);
       
       - void renderEdit(size_t targetID)   
