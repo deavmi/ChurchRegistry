@@ -1,0 +1,82 @@
+doctype html
+html
+  include header
+
+
+  body
+    center
+      div
+      h1 Priests
+      p Priest management
+      br
+
+      - void priestBlock(Priest p)
+        div(class="card")
+          h5(class="card-header") #{p.name()}
+          div(class="card-body")
+            <!-- h5(class="card-title") Fill in -->
+            p(class="card-text") Name: #{p.name()}
+            p(class="card-text") Address: #{p.address()}
+
+            p(class="card-text") Database ID: #{p.getId()}
+            p(class="card-text") Added: <i>#{p.dateAdded()}</i>
+            p(class="card-text") Last updated: <i>#{p.dateUpdated()}</i>
+
+
+            a(href="/priests?action=edit&id=#{p.getId()}",class="btn btn-edit") Edit
+            a(href="/priests?action=remove&id=#{p.getId()}",class="btn btn-danger") Remove
+
+
+      - void renderList()
+        a(href="/priests?action=add",class="btn btn-primary") Add priest
+        h3 Entries
+
+        - foreach(Priest p; db.getPriests(sf))
+          - priestBlock(p);
+      
+      - void renderEdit(size_t targetID)   
+        h3 Edit existing priest
+
+        - Priest p = db.getPriest(sf, targetID);
+
+        form(action="/doPriestEdit?id=#{targetID}",method="post")
+          div(class="form-row")
+            div(class="form-group col-md-6")
+              label(for="cn") Name of priest
+              input(type="text", class="form-control", name="priestName", id="pn", placeholder="#{p.name()}", value="#{p.name()}")
+            div(class="form-group col-md-6")
+              label(for="ca") Address
+              input(type="text", class="form-control", name="priestAddress", id="pa", placeholder="#{p.address()}", value="#{p.address()}")
+
+            button(type="submit", class="btn btn-primary") Update priest
+      
+
+      - void renderAdd()
+        h3 Add a new priest
+
+        form(action="/doPriestAdd",method="post")
+          div(class="form-row")
+            div(class="form-group col-md-6")
+              label(for="cn") Name of priest
+              input(type="text", class="form-control", name="priestName", id="pn", placeholder="Place name here")
+            div(class="form-group col-md-6")
+              label(for="ca") Address
+              input(type="text", class="form-control", name="priestAddress", id="pa", placeholder="Place address here")
+
+            button(type="submit", class="btn btn-primary") Add priest
+
+
+      - void renderDecide(string mode)
+        - DEBUG("Mode: ", mode == "list");
+        - if(mode == "list")
+          - renderList();
+        - else if(mode == "add")
+          - renderAdd();
+        - else if(mode == "edit")
+          - renderEdit(priestID);
+          
+
+      
+
+      <!-- Decide what to render -->
+      - renderDecide(mode);

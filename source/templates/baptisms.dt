@@ -1,0 +1,105 @@
+doctype html
+html
+  include header
+
+
+  body
+    center
+      div
+      h1 Baptisms
+      p Baptismal registry
+      br 
+
+      
+
+      br
+      br
+      
+      - void baptismBlock(Baptism b)
+        div(class="card")
+          h5(class="card-header") #{b.name()}
+          div(class="card-body")
+            <!-- h5(class="card-title") Fill in -->
+            p(class="card-text") Name: #{b.name()}
+            // p(class="card-text") Address: #{b.address()}
+
+            p(class="card-text") Database ID: #{b.getId()}
+            p(class="card-text") Added: <i>#{b.dateAdded()}</i>
+            p(class="card-text") Last updated: <i>#{b.dateUpdated()}</i>
+
+
+            a(href="/baptisms?action=edit&id=#{b.getId()}",class="btn btn-edit") Edit
+            a(href="/baptisms?action=remove&id=#{b.getId()}",class="btn btn-danger") Remove
+
+
+      - void renderList()
+        a(href="/baptisms?action=add",class="btn btn-primary") Add baptismal entry
+        h3 Entries
+
+        - DEBUG("Here before listing...");
+        - foreach(Baptism b; db.getBaptisms(sf))
+          - DEBUG("List: ", b);
+          - baptismBlock(b);
+      
+      - void renderEdit(size_t targetID)   
+        h3 Edit existing baptismal entry
+
+        - Baptism b = db.getBaptism(sf, targetID);
+
+        form(action="/doBaptismEdit?id=#{targetID}",method="post")
+          div(class="form-row")
+            div(class="form-group col-md-6")
+              label(for="cn") Name of priest
+              input(type="text", class="form-control", name="priestName", id="pn", placeholder="#{b.name()}", value="#{b.name()}")
+
+            button(type="submit", class="btn btn-primary") Update priest
+      
+
+      - void renderAdd()
+        h3 Add a new baptismal entry
+
+        form(action="/doBaptismAdd",method="post")
+          <!-- Baptismal title -->
+          div(class="form-group col-md-6")
+            label(for="bt") Title
+            input(type="text", class="form-control", name="baptismalTitle", id="bt", placeholder="Enter name of individual being baptised")
+
+          <!-- Church where baptism is occuring -->
+          label(for="church") Church
+          select(class="form-select", name="churchId", id="church")
+            - foreach(c; getChurches(sf))
+              option(value="#{c.getId()}") #{c.name()}
+
+          <!-- Parental figures -->
+          label(for="pff") Parental fatherly figure
+          select(class="form-select", name="parentalFigureFather", id="pff")
+            option(value="None") None
+            - foreach(pf; listParentalFigures(sf))
+              option(value="#{pf.getId()}") #{pf.name()}
+          label(for="pfm") Parental motherly figure
+          select(class="form-select", name="parentalFigureMother", id="pmf")
+            option(value="None") None
+            - foreach(pf; listParentalFigures(sf))
+              option(value="#{pf.getId()}") #{pf.name()}
+            
+
+          
+
+        button(type="submit", class="btn btn-primary") Save baptism
+
+
+      - void renderDecide(string mode)
+        - DEBUG("Mode: ", mode == "list");
+        - if(mode == "list")
+          - renderList();
+        - else if(mode == "add")
+          - renderAdd();
+        - else if(mode == "edit")
+          - renderEdit(baptismID);
+          
+
+      
+
+      <!-- Decide what to render -->
+      - renderDecide(mode);
+

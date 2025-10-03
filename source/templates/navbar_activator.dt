@@ -1,0 +1,7 @@
+- import logging;
+- DEBUG("Hello");
+- string HOME_ACTIVE = pgInfo.isHome ? "active" : "";
+- string CHURCH_ACTIVE = pgInfo.isChurches ? "active" : "";
+- string PARENTS_ACTIVE = pgInfo.isParents ? "active" : "";
+- string BAPTISM_ACTIVE = pgInfo.isBaptism ? "active" : "";
+- string PRIESTS_ACTIVE = pgInfo.isPriests ? "active" : "";

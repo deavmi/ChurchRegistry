@@ -1,0 +1,26 @@
+doctype html
+html
+  include header
+
+
+  body
+    center
+      div
+      h1 Parental figures
+      p Parent management
+      br
+      h3 Add a new parental figure
+
+      form(action="/doParentalFigureAdd",method="post")
+        div(class="form-row")
+          div(class="form-group col-md-6")
+            label(for="cn") Full name of parent
+            input(type="text", class="form-control", name="parentName", id="cn", placeholder="Place name here")
+          // div(class="form-group col-md-6")
+          //   label(for="ca") Address
+          //   input(type="text", class="form-control", name="churchAddress", id="ca", placeholder="Place address here")
+          // div(class="form-group col-md-6")
+          //   label(for="cp") Province
+          //   input(type="text", class="form-control", name="churchProvince", id="cp", placeholder="Place province here")
+
+        button(type="submit", class="btn btn-primary") Save parent

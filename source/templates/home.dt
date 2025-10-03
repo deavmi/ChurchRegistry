@@ -1,0 +1,11 @@
+doctype html
+html
+  include header
+
+  body
+    center
+      div
+      h1 Welcome
+      p Welcome to the church management page
+      br
+      h3 Ok

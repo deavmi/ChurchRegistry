@@ -4,11 +4,12 @@
 	],
 	"copyright": "Copyright © 2025, Tristan B. Velloza Kildaire",
 	"dependencies": {
-		"ddbc": "~>0.6.2",
+		"ddbc": "~>0.5.8",
 		"gogga": "~>3.1.1",
 		"printed": "~>1.3.5",
 		"printed:flow": "~>1.3.5",
-		"vibe-d": "~>0.10.1"
+		"vibe-d": "~>0.10.1",
+		"hibernated": "~>0.4.0"
 	},
 	"stringImportPaths": ["source/templates"],
 	"description": "Registry for Worcester Catholic Church",
